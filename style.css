@@ -10,6 +10,12 @@ body {
     color: white;
 }
 
+select {
+    padding: 10px;
+    border-radius: 8px;
+    background: #302f2f;
+    color: white;
+}
 
 /* ================= HEADER ================= */
 header {

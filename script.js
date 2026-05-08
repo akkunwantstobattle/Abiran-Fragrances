@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const volumeSelect = document.getElementById("volume");
     const priceDisplay = document.getElementById("price");
     const addBtn = document.getElementById("addToCart");
+    const qtyInput = document.getElementById("quantity");
 
     if (volumeSelect && priceDisplay && addBtn) {
 
@@ -50,49 +51,102 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         function updatePrice() {
-            const vol = volumeSelect.value;
-            const price = priceData[productName]?.[vol] || 0;
-            priceDisplay.textContent = price;
-        }
+
+    const vol = volumeSelect.value;
+
+    const basePrice = priceData[productName]?.[vol] || 0;
+
+    const quantity = parseInt(qtyInput.value);
+
+    priceDisplay.textContent = basePrice * quantity;
+}
 
         volumeSelect.addEventListener("change", updatePrice);
+        qtyInput.addEventListener("change", updatePrice);
         updatePrice();
 
         addBtn.addEventListener("click", (e) => {
-            e.preventDefault();
+    e.preventDefault();
 
-            const item = {
-                name: productName,
-                volume: volumeSelect.value,
-                quantity: 1,
-                price: priceDisplay.textContent
-            };
+    const qtyInput = document.getElementById("quantity");
 
-            localStorage.setItem("cartItem", JSON.stringify(item));
-            window.location.href = "cart.html";
-        });
+    const item = {
+        name: productName,
+        volume: volumeSelect.value,
+        quantity: parseInt(qtyInput.value),
+        price: priceData[productName][volumeSelect.value]
+    };
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existing = cart.find(p =>
+        p.name === item.name && p.volume === item.volume
+    );
+
+    if (existing) {
+        existing.quantity += item.quantity;
+    } else {
+        cart.push(item);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert("Product added to cart!");
+});
     }
 
     // ===== CART PAGE =====
-    const cartBody = document.getElementById("cart-body");
 
-    if (cartBody) {
-        const item = JSON.parse(localStorage.getItem("cartItem"));
+const cartBody = document.getElementById("cart-body");
 
-        if (item) {
-            cartBody.innerHTML = `
-                <tr>
-                    <td>${item.name} (${item.volume} ml)</td>
-                    <td>${item.quantity}</td>
-                    <td>৳${item.price}</td>
-                </tr>
-            `;
+if (cartBody) {
 
-            const totalEl = document.getElementById("cart-total");
-            if (totalEl) {
-                totalEl.textContent = "Total: ৳" + item.price;
-            }
-        }
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let total = 0;
+
+    cartBody.innerHTML = "";
+
+    cart.forEach(item => {
+
+        const rowTotal = item.price * item.quantity;
+
+        total += rowTotal;
+
+        cartBody.innerHTML += `
+
+            <tr>
+                <td>${item.name} (${item.volume} ml)</td>
+                <td>${item.quantity}</td>
+                <td>৳${rowTotal}</td>
+            </tr>
+
+        `;
+    });
+
+    const totalEl = document.getElementById("cart-total");
+
+    if (totalEl) {
+
+        totalEl.textContent = "Total: ৳" + total;
+
     }
+}
+
+// ===== CLEAR CART =====
+
+const clearBtn = document.getElementById("clearCart");
+
+if (clearBtn) {
+
+    clearBtn.addEventListener("click", () => {
+
+        localStorage.removeItem("cart");
+
+        location.reload();
+
+    });
+
+}
 
 });
