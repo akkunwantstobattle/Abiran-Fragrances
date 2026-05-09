@@ -1,20 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ===== SLIDER (INDEX PAGE ONLY) =====
-    const track = document.querySelector(".product-track");
-    const cards = document.querySelectorAll(".product-link");
+   const track = document.querySelector(".product-track");
+const cards = document.querySelectorAll(".product-link");
 
-    if (track && cards.length > 0) {
-        let index = 0;
-        const visible = 3;
-        const cardWidth = 310;
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
 
-        setInterval(() => {
-            index++;
-            if (index > cards.length - visible) index = 0;
-            track.style.transform = `translateX(-${index * cardWidth}px)`;
-        }, 3000);
+if (track && cards.length > 0) {
+
+    let index = 0;
+
+    const visible = 3;
+
+    const cardWidth = 310;
+
+    const maxIndex = cards.length - visible;
+
+    function updateSlider() {
+
+        track.style.transform = `translateX(-${index * cardWidth}px)`;
+
     }
+
+    // ===== AUTO SLIDE =====
+
+    setInterval(() => {
+
+        index++;
+
+        if (index > maxIndex) {
+
+            index = 0;
+
+        }
+
+        updateSlider();
+
+    }, 3000);
+
+    // ===== RIGHT BUTTON =====
+
+    nextBtn.addEventListener("click", () => {
+
+        if (index < maxIndex) {
+
+            index++;
+
+        } else {
+
+            index = 0;
+
+        }
+
+        updateSlider();
+
+    });
+
+    // ===== LEFT BUTTON =====
+
+    prevBtn.addEventListener("click", () => {
+
+        if (index > 0) {
+
+            index--;
+
+        } else {
+
+            index = maxIndex;
+
+        }
+
+        updateSlider();
+
+    });
+
+}
 
     // ===== PRODUCT PAGE (PRICING + ADD TO CART) =====
     const volumeSelect = document.getElementById("volume");

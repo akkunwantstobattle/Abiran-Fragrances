@@ -187,9 +187,48 @@ header {
     margin-bottom: 50px;
 }
 
+/* ===== SLIDER CONTROLS ===== */
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.slider-btn {
+    width: 55px;
+    height: 55px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: #c9a14a;
+    font-size: 28px;
+    cursor: pointer;
+
+    backdrop-filter: blur(6px);
+
+    transition:
+        transform 0.3s,
+        background 0.3s,
+        box-shadow 0.3s;
+}
+
+.slider-btn:hover {
+    background: rgba(201,161,74,0.15);
+    transform: scale(1.1);
+
+    box-shadow:
+        0 0 15px rgba(201,161,74,0.35),
+        0 0 30px rgba(201,161,74,0.15);
+}
+
+.slider-btn:active {
+    transform: scale(0.96);
+}
+
 .product-slider {
     width: 930px;          /* 3 cards × 280px + gaps */
-    margin: auto;
     overflow: hidden;
     padding: 20px 5px 0 20px; 
 }
