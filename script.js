@@ -193,6 +193,188 @@ if (cartBody) {
     }
 }
 
+// ===== SHIPPING SYSTEM =====
+
+const divisionSelect = document.getElementById("division");
+const zillaSelect = document.getElementById("zilla");
+
+const productsTotalEl = document.getElementById("productsTotal");
+const shippingCostEl = document.getElementById("shippingCharge");
+const finalTotalEl = document.getElementById("finalTotal");
+
+// ===== DIVISION → ZILLA DATA =====
+
+const zillaData = {
+
+    "Dhaka": [
+        "Dhaka",
+        "Gazipur",
+        "Narayanganj",
+        "Tangail",
+        "Kishoreganj"
+    ],
+
+    "Chattogram": [
+        "Chattogram",
+        "Cox's Bazar",
+        "Comilla",
+        "Feni"
+    ],
+
+    "Rajshahi": [
+        "Rajshahi",
+        "Bogura",
+        "Pabna"
+    ],
+
+    "Khulna": [
+        "Khulna",
+        "Jessore",
+        "Satkhira"
+    ],
+
+    "Barishal": [
+        "Barishal",
+        "Bhola",
+        "Patuakhali"
+    ],
+
+    "Sylhet": [
+        "Sylhet",
+        "Moulvibazar",
+        "Habiganj"
+    ],
+
+    "Rangpur": [
+        "Rangpur",
+        "Dinajpur",
+        "Kurigram"
+    ],
+
+    "Mymensingh": [
+        "Mymensingh",
+        "Netrokona",
+        "Jamalpur"
+    ]
+
+};
+
+// ===== UPDATE ZILLA DROPDOWN =====
+
+if (divisionSelect && zillaSelect) {
+
+    divisionSelect.addEventListener("change", () => {
+
+        const selectedDivision = divisionSelect.value;
+
+        zillaSelect.innerHTML =
+            `<option value="">Select Zilla</option>`;
+
+        if (zillaData[selectedDivision]) {
+
+            zillaData[selectedDivision].forEach(zilla => {
+
+                zillaSelect.innerHTML +=
+                    `<option value="${zilla}">${zilla}</option>`;
+
+            });
+
+        }
+
+        updateFinalTotal();
+
+    });
+
+}
+
+// ===== SHIPPING CHARGE =====
+
+function getShippingCharge() {
+
+    const division = divisionSelect?.value;
+
+    if (division === "Dhaka") {
+
+        return 60;
+
+    } else if (division) {
+
+        return 120;
+
+    }
+
+    return 0;
+
+}
+
+// ===== FINAL TOTAL =====
+
+function updateFinalTotal() {
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        subtotal += item.price * item.quantity;
+
+    });
+
+    const shipping = getShippingCharge();
+    const orderBtn = document.querySelector(".checkout-form .buy-btn");
+    const finalTotal = subtotal + shipping;
+
+    if (productsTotalEl) {
+
+    productsTotalEl.textContent = "৳" + subtotal;
+
+    }
+
+    if (shippingCostEl) {
+
+        shippingCostEl.textContent = "৳" + shipping;
+
+    }
+
+    if (finalTotalEl) {
+
+        finalTotalEl.textContent = "৳" + finalTotal;
+
+    }
+
+    if (orderBtn) {
+
+    if (subtotal === 0) {
+
+        orderBtn.disabled = true;
+
+        orderBtn.textContent = "Cart is Empty";
+
+        orderBtn.style.opacity = "0.6";
+
+        orderBtn.style.cursor = "not-allowed";
+
+    } else {
+
+        orderBtn.disabled = false;
+
+        orderBtn.textContent = "Place Order";
+
+        orderBtn.style.opacity = "1";
+
+        orderBtn.style.cursor = "pointer";
+
+    }
+
+}
+
+}
+
+// ===== RUN TOTAL UPDATE =====
+
+updateFinalTotal();
+
 // ===== CLEAR CART =====
 
 const clearBtn = document.getElementById("clearCart");
@@ -208,5 +390,4 @@ if (clearBtn) {
     });
 
 }
-
-});
+    });

@@ -16,35 +16,95 @@
 
     <div class="cart-box">
 
-        <form>
+        <form class="checkout-form">
 
-            <label>Full Name</label><br>
-            <input type="text" required><br><br>
+    <!-- CUSTOMER INFO -->
+    <div class="form-section">
+        <h2>Customer Information</h2>
 
-            <label>Email</label><br>
-            <input type="email" required><br><br>
+        <label>Full Name</label>
+        <input type="text" required>
 
-            <label>Phone</label><br>
-            <input type="tel" required><br><br>
+        <label>Email</label>
+        <input type="email" required>
 
-            <label>Shipping Address</label><br>
-            <textarea rows="4" required></textarea><br><br>
+        <label>Phone</label>
+        <input type="tel" required>
+    </div>
 
-            <label>Payment Method</label><br>
-            <select>
-                <option>Cash on Delivery</option>
-                <option>Credit / Debit Card</option>
-                <option>Mobile Banking</option>
-            </select><br><br>
+    <!-- SHIPPING ADDRESS -->
+    <div class="form-section">
+        <h2>Shipping Address</h2>
 
-            <button type="submit" class="buy-btn">
-                Place Order
-            </button>
+        <label>Country</label>
+        <select required>
+            <option>Bangladesh</option>
+        </select>
 
-        </form>
+        <label>Division</label>
+<select id="division" required>
+    <option value="">Select Division</option>
+
+    <option value="Dhaka">Dhaka</option>
+    <option value="Chattogram">Chattogram</option>
+    <option value="Rajshahi">Rajshahi</option>
+    <option value="Khulna">Khulna</option>
+    <option value="Barishal">Barishal</option>
+    <option value="Sylhet">Sylhet</option>
+    <option value="Rangpur">Rangpur</option>
+    <option value="Mymensingh">Mymensingh</option>
+</select>
+
+<label>Zilla</label>
+<select id="zilla" required>
+    <option value="">Select Zilla</option>
+</select>
+
+        <label>Detailed Address</label>
+        <textarea rows="4" required></textarea>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="form-section">
+        <h2>Payment Method</h2>
+
+        <select required>
+            <option>Cash on Delivery</option>
+            <option>Credit / Debit Card</option>
+            <option>Mobile Banking</option>
+        </select>
+    </div>
+
+<!-- ORDER SUMMARY -->
+<div class="form-section">
+
+    <h2>Order Summary</h2>
+
+    <div class="price-row">
+        <span>Products Total</span>
+        <span id="productsTotal">৳0</span>
+    </div>
+
+    <div class="price-row">
+        <span>Shipping Charge</span>
+        <span id="shippingCharge">৳120</span>
+    </div>
+
+    <div class="price-row total-row">
+        <strong>Total Payable</strong>
+        <strong id="finalTotal">৳0</strong>
+    </div>
+
+</div>
+
+    <button type="submit" class="buy-btn">
+        Place Order
+    </button>
+
+</form>
 
     </div>
 </section>
-
+<script src="script.js"></script>
 </body>
 </html>
