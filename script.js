@@ -186,11 +186,13 @@ function renderCart() {
 
         cart.forEach((item, index) => {
 
-            const rowTotal = item.price * item.quantity;
+    const rowTotal = item.price * item.quantity;
 
-            subtotal += rowTotal;
+    subtotal += rowTotal;
 
-            cartBody.innerHTML += `
+    if (cartBody) {
+
+        cartBody.innerHTML += `
 
                 <tr>
 
@@ -228,6 +230,8 @@ function renderCart() {
                 </tr>
 
             `;
+
+           }
 
         });
 
@@ -287,6 +291,14 @@ if (summaryItemsEl) {
     const shipping = getShippingCharge();
 
     const finalTotal = subtotal + shipping;
+
+    const totalEl = document.getElementById("cart-total");
+
+    if (totalEl) {
+
+        totalEl.textContent = "Total: ৳" + subtotal;
+
+    }
 
     if (productsTotalEl) {
 
