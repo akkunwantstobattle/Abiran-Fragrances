@@ -155,43 +155,244 @@ if (track && cards.length > 0) {
 });
     }
 
-    // ===== CART PAGE =====
+// ===== RENDER CART ITEMS + LIVE TOTALS =====
 
 const cartBody = document.getElementById("cart-body");
-
-if (cartBody) {
+function renderCart() {
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    let total = 0;
+    let subtotal = 0;
 
-    cartBody.innerHTML = "";
+    // ===== CART TABLE =====
 
-    cart.forEach(item => {
+    if (cartBody) {
 
-        const rowTotal = item.price * item.quantity;
+        cartBody.innerHTML = "";
 
-        total += rowTotal;
+        if (cart.length === 0) {
 
-        cartBody.innerHTML += `
+            cartBody.innerHTML = `
 
-            <tr>
-                <td>${item.name} (${item.volume} ml)</td>
-                <td>${item.quantity}</td>
-                <td>৳${rowTotal}</td>
-            </tr>
+                <tr>
+                    <td colspan="4">
+                        Your cart is empty.
+                    </td>
+                </tr>
 
-        `;
-    });
+            `;
 
-    const totalEl = document.getElementById("cart-total");
+        }
 
-    if (totalEl) {
+        cart.forEach((item, index) => {
 
-        totalEl.textContent = "Total: ৳" + total;
+            const rowTotal = item.price * item.quantity;
+
+            subtotal += rowTotal;
+
+            cartBody.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${item.name} (${
+                                      item.volume.endsWith("s")
+                                      ? item.volume.replace("s", "") + "ml spray"
+                                      : item.volume + "ml"
+                                       })
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            min="1"
+                            value="${item.quantity}"
+                            class="cart-qty"
+                            data-index="${index}"
+                        >
+                    </td>
+
+                    <td>
+                        ৳${rowTotal}
+                    </td>
+
+                    <td>
+                        <button
+                            class="remove-item"
+                            data-index="${index}"
+                        >
+                            Remove
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
 
     }
+
+    // ===== ORDER SUMMARY ITEMS =====
+
+const summaryItemsEl = document.getElementById("summaryItems");
+
+if (summaryItemsEl) {
+
+    summaryItemsEl.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        summaryItemsEl.innerHTML = `
+            <div class="summary-item">
+                <span>Your cart is empty.</span>
+            </div>
+        `;
+
+    } else {
+
+        cart.forEach(item => {
+
+            const rowTotal = item.price * item.quantity;
+
+            summaryItemsEl.innerHTML += `
+
+                <div class="summary-item">
+
+                    <span>
+                        ${item.name}
+                        (${
+                        item.volume.endsWith("s")
+                        ? item.volume.replace("s", "") + "ml spray"
+                        : item.volume + "ml"
+                        } × ${item.quantity})
+                    </span>
+
+                    <span>
+                        ৳${rowTotal}
+                    </span>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
 }
+
+    // ===== TOTALS =====
+
+    const shipping = getShippingCharge();
+
+    const finalTotal = subtotal + shipping;
+
+    if (productsTotalEl) {
+
+        productsTotalEl.textContent = "৳" + subtotal;
+
+    }
+
+    if (shippingCostEl) {
+
+        shippingCostEl.textContent = subtotal === 0
+            ? "৳0"
+            : "৳" + shipping;
+
+    }
+
+    if (finalTotalEl) {
+
+        finalTotalEl.textContent = "৳" + (
+            subtotal === 0
+                ? 0
+                : finalTotal
+        );
+
+    }
+
+    // ===== EMPTY CART BUTTON LOGIC =====
+
+    const orderBtn = document.querySelector(".checkout-form .buy-btn");
+
+    if (orderBtn) {
+
+        if (subtotal === 0) {
+
+            orderBtn.disabled = true;
+
+            orderBtn.textContent = "Cart is Empty";
+
+            orderBtn.style.opacity = "0.6";
+
+            orderBtn.style.cursor = "not-allowed";
+
+        } else {
+
+            orderBtn.disabled = false;
+
+            orderBtn.textContent = "Place Order";
+
+            orderBtn.style.opacity = "1";
+
+            orderBtn.style.cursor = "pointer";
+
+        }
+
+    }
+
+    attachCartEvents();
+
+}
+
+// ===== QUANTITY + REMOVE EVENTS =====
+
+function attachCartEvents() {
+
+    const qtyInputs = document.querySelectorAll(".cart-qty");
+
+    qtyInputs.forEach(input => {
+
+        input.addEventListener("change", () => {
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const index = input.dataset.index;
+
+            cart[index].quantity = parseInt(input.value);
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            renderCart();
+
+        });
+
+    });
+
+    const removeBtns = document.querySelectorAll(".remove-item");
+
+    removeBtns.forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const index = btn.dataset.index;
+
+            cart.splice(index, 1);
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            renderCart();
+
+        });
+
+    });
+
+}
+
+
 
 // ===== SHIPPING SYSTEM =====
 
@@ -201,6 +402,10 @@ const zillaSelect = document.getElementById("zilla");
 const productsTotalEl = document.getElementById("productsTotal");
 const shippingCostEl = document.getElementById("shippingCharge");
 const finalTotalEl = document.getElementById("finalTotal");
+
+// ===== INITIAL RENDER =====
+
+renderCart();
 
 // ===== DIVISION → ZILLA DATA =====
 
@@ -287,19 +492,29 @@ if (divisionSelect && zillaSelect) {
 
 }
 
+if (zillaSelect) {
+
+    zillaSelect.addEventListener("change", () => {
+
+        updateFinalTotal();
+
+    });
+
+}
+
 // ===== SHIPPING CHARGE =====
 
 function getShippingCharge() {
 
-    const division = divisionSelect?.value;
+    const zilla = zillaSelect?.value;
 
-    if (division === "Dhaka") {
+    if (zilla === "Dhaka") {
 
         return 60;
 
-    } else if (division) {
+    } else if (zilla) {
 
-        return 120;
+        return 140;
 
     }
 

@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Checkout | Abiran</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,8 +19,13 @@
 
         <form class="checkout-form">
 
+<div class="checkout-layout">
+
+    <div class="checkout-left">
+
     <!-- CUSTOMER INFO -->
     <div class="form-section">
+
         <h2>Customer Information</h2>
 
         <label>Full Name</label>
@@ -30,10 +36,12 @@
 
         <label>Phone</label>
         <input type="tel" required>
+
     </div>
 
     <!-- SHIPPING ADDRESS -->
     <div class="form-section">
+
         <h2>Shipping Address</h2>
 
         <label>Country</label>
@@ -42,30 +50,34 @@
         </select>
 
         <label>Division</label>
-<select id="division" required>
-    <option value="">Select Division</option>
+        <select id="division" required>
 
-    <option value="Dhaka">Dhaka</option>
-    <option value="Chattogram">Chattogram</option>
-    <option value="Rajshahi">Rajshahi</option>
-    <option value="Khulna">Khulna</option>
-    <option value="Barishal">Barishal</option>
-    <option value="Sylhet">Sylhet</option>
-    <option value="Rangpur">Rangpur</option>
-    <option value="Mymensingh">Mymensingh</option>
-</select>
+            <option value="">Select Division</option>
 
-<label>Zilla</label>
-<select id="zilla" required>
-    <option value="">Select Zilla</option>
-</select>
+            <option value="Dhaka">Dhaka</option>
+            <option value="Chattogram">Chattogram</option>
+            <option value="Rajshahi">Rajshahi</option>
+            <option value="Khulna">Khulna</option>
+            <option value="Barishal">Barishal</option>
+            <option value="Sylhet">Sylhet</option>
+            <option value="Rangpur">Rangpur</option>
+            <option value="Mymensingh">Mymensingh</option>
+
+        </select>
+
+        <label>Zilla</label>
+        <select id="zilla" required>
+            <option value="">Select Zilla</option>
+        </select>
 
         <label>Detailed Address</label>
         <textarea rows="4" required></textarea>
+
     </div>
 
     <!-- PAYMENT -->
     <div class="form-section">
+
         <h2>Payment Method</h2>
 
         <select required>
@@ -73,33 +85,46 @@
             <option>Credit / Debit Card</option>
             <option>Mobile Banking</option>
         </select>
+
     </div>
 
-<!-- ORDER SUMMARY -->
-<div class="form-section">
+    </div>
+
+<div class="checkout-right">
+
+   <!-- PRICING SUMMARY -->
+<div class="form-section order-summary">
 
     <h2>Order Summary</h2>
 
-    <div class="price-row">
-        <span>Products Total</span>
-        <span id="productsTotal">৳0</span>
+    <div id="summaryItems"></div>
+
+    <div class="summary-divider"></div>
+
+    <div class="summary-item">
+        <span class="summary-label">Subtotal</span>
+        <span class="summary-value" id="productsTotal">৳0</span>
     </div>
 
-    <div class="price-row">
-        <span>Shipping Charge</span>
-        <span id="shippingCharge">৳120</span>
+    <div class="summary-item">
+        <span class="summary-label">Shipping Fee</span>
+        <span class="summary-value" id="shippingCharge">৳0</span>
     </div>
 
-    <div class="price-row total-row">
-        <strong>Total Payable</strong>
-        <strong id="finalTotal">৳0</strong>
+    <div class="summary-total">
+        <span>Total</span>
+        <span id="finalTotal">৳0</span>
     </div>
 
 </div>
 
     <button type="submit" class="buy-btn">
-        Place Order
-    </button>
+    Place Order
+</button>
+
+</div>
+
+</div>
 
 </form>
 
